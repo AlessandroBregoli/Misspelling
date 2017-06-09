@@ -60,6 +60,6 @@ class PriorGenerator:
                 self.successor[key][key2] /= tot2
         
     def serialize(self, path):
-        tmp_dic = {"Dictionary":self.dictionary, "Freq": self.freq, "Successor":self.successor}
+        tmp_dic = {"Dictionary":list(self.dictionary), "Freq": self.freq, "Successor":self.successor}
         with open(path,"w") as outFile:
             json.dump(tmp_dic,outFile)

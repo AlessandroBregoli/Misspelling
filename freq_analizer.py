@@ -4,6 +4,7 @@ class PriorGenerator:
     def __init__(self):
         self.freq = {}
         self.successor = {}
+        self.word_successor = {}
         self.dictionary = set()
         self.stopSymbols = []
     
@@ -48,8 +49,19 @@ class PriorGenerator:
                 
                 #Analizzo le parole
                 line = line.split()
-                for word in line:
-                    self.dictionary.add(word)
+                for word_id in range(len(line)):
+                    self.dictionary.add(line[word_id])
+                    if word_id < len(line)-1:
+                        try:
+                            suc = self.word_successor[line[word_id]]
+                            try:
+                                suc[line[word_id + 1]] += 1
+                            except:
+                                suc[line[word_id + 1]] = 1
+                        except:
+                            self.word_successor[line[word_id]] = {}
+                            self.word_successor[line[word_id]][line[word_id + 1]] = 1
+                        
     
     def finalize(self):
         tot = sum(self.freq.values())
@@ -58,8 +70,13 @@ class PriorGenerator:
             tot2 = sum(self.successor[key].values())
             for key2 in self.successor[key].keys():
                 self.successor[key][key2] /= tot2
+        for key in self.word_successor.keys():
+            tot = sum(self.word_successor[key].values())
+            for key2 in self.word_successor[key].keys():
+                self.word_successor[key][key2] /= tot
         
     def serialize(self, path):
-        tmp_dic = {"Dictionary":list(self.dictionary), "Freq": self.freq, "Successor":self.successor}
+        tmp_dic = {"Dictionary":list(self.dictionary), "Freq": self.freq, "Successor":self.successor,\
+                 "Word_successor": self.word_successor}
         with open(path,"w") as outFile:
             json.dump(tmp_dic,outFile)

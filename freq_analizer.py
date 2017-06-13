@@ -31,7 +31,7 @@ class PriorGenerator:
                     char = line[i]
                     if (char > "z" or char < "a"):
                         continue
-                    try:        
+                    try:
                         self.freq[char] += 1
                     except:
                         self.freq[char] = 1

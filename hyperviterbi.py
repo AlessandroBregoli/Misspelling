@@ -5,10 +5,10 @@ import editdistance
 
 class Hyperviterbi:
     def __init__(self,prior_generator, neighbors):
-    self.m_err = adiacenti.ModelloErrore()
-    self.m_err.calcola_adiacenze()
-    self.prior_generator = prior_generator
-    self.neighbors = neighbors
+        self.m_err = adiacenti.ModelloErrore()
+        self.m_err.calcola_adiacenze()
+        self.prior_generator = prior_generator
+        self.neighbors = neighbors
 
     def find_neighbors(self, word):
         l_words = []
@@ -17,20 +17,18 @@ class Hyperviterbi:
         worst_word_id = -1
         for w in self.prior_generator.dictionary:
             dist = editdistance.eval(word, w)
-            if len(tmp_dict) < self.neighbors:
+            if len(l_words) < self.neighbors:
                 l_words.append(w)
                 l_dist.append(dist)
             elif max_dist > dist:
-                l_words.remove(worst_word_id)
-                l_dist.remove(worst_word_id)
-                l_words.append(w)
-                l_dist.append(dist)
+                l_words[worst_word_id] = w
+                l_dist[worst_word_id] = dist
             max_dist = max(l_dist)
             worst_word_id = l_dist.index(max_dist)
         return l_words
             
 
-    def distanza_malvagia(s1, s2):
+    def distanza_malvagia(self, s1, s2):
         """
             S1 è evidenza
         """

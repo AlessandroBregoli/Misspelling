@@ -1,10 +1,10 @@
 import numpy
 import adiacenti
 from freq_analizer import PriorGenerator
-import editdistance
+import Levenshtein
 
 class Hyperviterbi:
-    def __init__(self,prior_generator, neighbors):
+    def __init__(self, prior_generator, neighbors):
         self.m_err = adiacenti.ModelloErrore()
         self.m_err.calcola_adiacenze()
         self.prior_generator = prior_generator
@@ -16,7 +16,7 @@ class Hyperviterbi:
         max_dist = 5000 #TODO: mettere un valore sensato tipo max int
         worst_word_id = -1
         for w in self.prior_generator.dictionary:
-            dist = editdistance.eval(word, w)
+            dist = Levenshtein.distance(word, w)
             if len(l_words) < self.neighbors:
                 l_words.append(w)
                 l_dist.append(dist)

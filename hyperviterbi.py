@@ -26,13 +26,12 @@ class Hyperviterbi:
             max_dist = max(l_dist)
             worst_word_id = l_dist.index(max_dist)
         return l_words
-            
 
     def distanza_malvagia(self, s1, s2):
         """
             S1 è evidenza
         """
-        mat = numpy.zeros((len(s2)+1,len(s1)+1), dtype="float")
+        mat = numpy.zeros((len(s2) + 1, len(s1) + 1), dtype="float")
         mat[0][0] = self.m_err.azzecca
         for i in range(len(s1)+1):
             mat[0][i] = self.m_err.p_inserzione ** i
@@ -45,14 +44,14 @@ class Hyperviterbi:
                 else:
                     inserz = mat[j-1][i] * self.m_err.p_inserzione
                     omiss = mat[j][i-1] * self.m_err.p_omissione
-                    try: 
+                    try:
                         prob_sost = self.m_err.probs[s2[j-1]][s1[i-1]]
                     except KeyError:
                         prob_sost = 0
                     sostit = mat[j-1][i-1] * prob_sost
                     mat[j][i] = max(inserz, omiss, sostit)
         return mat[len(s2),len(s1)]
-    
+
     #This function split the phrase using the space character; can be enanched considering
     #the possibility of multiple words without space or words splitted in two parts
     def pre_viterbi(self, pharase):
@@ -60,44 +59,62 @@ class Hyperviterbi:
         for x in pharase.split():
             ret.append(self.find_neighbors(x))
         return ret
-    
 
     def viterbi(self, phrase):
+        #frase minuscola
+        phrase = phrase.lower()
+        #estraggo parole più vicine del dizionario
         data = self.pre_viterbi(phrase)
+        #divido frase in parole
         splitted_phrase = phrase.split()
-        vit_struct = []
-        tmp_state = []
-       
+        vit_struct = [] #conterrà la bella di viterbi
+        tmp_state = []  #conterrà la colonna corrente di viterbi
+        #la singola cella di viterbi contiene una probabilità
+        #e l'indice del predecessore
+
+        #calcolo la prima colonna
         for j in range(0,self.neighbors):
             tmp_dict = {}
             tmp_dict["best_pred"] = 0
             tmp_dict["prob"] = self.distanza_malvagia(splitted_phrase[0], data[0][j])
             tmp_state.append(tmp_dict)
+        #aggiungo la prima colonna
         vit_struct.append(tmp_state)
-
-        for i in range(1,len(data)):
+        
+        #ciclo sulle colonne da 1 in poi
+        for i in range(1, len(data)):
             tmp_state = []
+            #ciclo sulle righe della colonna
             for j in range(self.neighbors):
                 tmp_dict = {}
+                #inizializzo a 0 i campi della cella
                 tmp_dict["best_pred"] = 0
                 tmp_dict["prob"] = 0
+                #ciclo sulle celle della colonna
                 for k in range(self.neighbors):
-                    prob = vit_struct[i-1][k]["prob"] * \
+                    #ciclo sulle celle della colonna precedente
+                    #per trove il predecessore più probabile
+                    prob = vit_struct[i - 1][k]["prob"] * \
                         self.prior_generator.get_word_successor(data[i-1][k], data[i][j]) * \
-                        self.distanza_malvagia(splitted_phrase[i],data[i][j])
-                    if tmp_dict["prob"]  < prob:
+                        self.distanza_malvagia(splitted_phrase[i], data[i][j])
+                    #se è maggiore della probabilità già salvata, la sostituiamo
+                    #e impostiamo il predecessore
+                    if tmp_dict["prob"] < prob:
                         tmp_dict["prob"] = prob
                         tmp_dict["best_pred"] = k
                 tmp_state.append(tmp_dict)
             vit_struct.append(tmp_state)
+        #inizializzo l'output con stringhe vuote
         ret = ["" for x in range(len(data))]
         tmp_max = 0
         max_pos = -1
-        for x in range(0,self.neighbors):
+        #trovo stato finale più probabile
+        for x in range(0, self.neighbors):
             if tmp_max < vit_struct[-1][x]["prob"]:
                 max_pos = x
                 tmp_max = vit_struct[-1][x]["prob"]
-        for x in range(len(data)-1, -1, -1):
+        #ricostruisco all'indietro
+        for x in range(len(data) - 1, -1, -1):
             ret[x] = data[x][max_pos]
             max_pos = vit_struct[x][max_pos]["best_pred"]
-        return ret   
+        return ret

@@ -29,19 +29,38 @@ class Hyperviterbi:
 
     def distanza_malvagia(self, s1, s2):
         """
-            S1 è evidenza
+            S1 è evidenza. Calcola probabilità di aver inteso
+            scrivere s2 dato che si è scritto s1, usando il modello
+            di errore.
         """
+        #inizializzo a zero matrice della edit distance
         mat = numpy.zeros((len(s2) + 1, len(s1) + 1), dtype="float")
+        #il primo numero è la probabiltà di scrivere stringa vuota
+        #avendo inteso stringa vuota, ma in realtà viene sovrascritto
         mat[0][0] = self.m_err.azzecca
+        #riempio prima riga: probabilità di aver inserito caratteri
+        #intendendo invece la stringa vuota: sarà bassa ma la mettiamo
+        #per coerenza
         for i in range(len(s1)+1):
             mat[0][i] = self.m_err.p_inserzione ** i
+        #riempio la prima colonna: probabiltà di intendere lettere
+        #avendo scritto niente: sarà bassa ma la mettiamo per coerenza
         for j in range(len(s2)+1):
             mat[j][0] = self.m_err.p_omissione ** j
+        
+        #calcolo principale: in stile edit-distance ma si utilizza
+        #la probabilità
         for j in range(1,len(s2)+1):
             for i in range(1, len(s1)+1):
+                #se le lettere sono uguali: moltiplico per la 
+                #probabilità di aver azzeccato anche questa
                 if s1[i-1] == s2[j-1]:
                     mat[j][i] = mat[j-1][i-1] * self.m_err.azzecca
                 else:
+                    #altrimenti c'è un errore: tra i 3 diversi errori
+                    #possibili (inserzione, omissione, sostituzione)
+                    #scelgo quello più probabile secondo il modello
+                    #di errore
                     inserz = mat[j-1][i] * self.m_err.p_inserzione
                     omiss = mat[j][i-1] * self.m_err.p_omissione
                     try:
@@ -50,7 +69,7 @@ class Hyperviterbi:
                         prob_sost = 0
                     sostit = mat[j-1][i-1] * prob_sost
                     mat[j][i] = max(inserz, omiss, sostit)
-        return mat[len(s2),len(s1)]
+        return mat[len(s2), len(s1)]
 
     #This function split the phrase using the space character; can be enanched considering
     #the possibility of multiple words without space or words splitted in two parts

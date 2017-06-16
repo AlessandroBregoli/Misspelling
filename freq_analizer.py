@@ -1,13 +1,20 @@
 import json
 
 class PriorGenerator:
-    def __init__(self):
+    def __init__(self, zero_to_alpha):
         self.freq = {}
         self.successor = {}
         self.word_successor = {}
         self.dictionary = set()
         self.stopSymbols = []
+        self.zero_to_alpha = zero_to_alpha
     
+    def get_word_successor(self, w1, w2):
+        try:
+            return self.word_successor[w1][w2]
+        except:
+            return self.zero_to_alpha
+            
     def load_stop_symbols_from_file(self, path):
         with open(path) as file:
             for x in file.readlines():

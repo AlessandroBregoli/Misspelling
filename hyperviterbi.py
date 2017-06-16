@@ -53,3 +53,51 @@ class Hyperviterbi:
                     mat[j][i] = max(inserz, omiss, sostit)
         return mat[len(s2),len(s1)]
     
+    #This function split the phrase using the space character; can be enanched considering
+    #the possibility of multiple words without space or words splitted in two parts
+    def pre_viterbi(self, pharase):
+        ret = []
+        for x in pharase.split():
+            ret.append(self.find_neighbors(x))
+        return ret
+    
+
+    def viterbi(self, phrase):
+        data = self.pre_viterbi(phrase)
+        splitted_phrase = phrase.split()
+        vit_struct = []
+        tmp_state = []
+       
+        for j in range(0,self.neighbors):
+            tmp_dict = {}
+            tmp_dict["best_pred"] = 0
+            tmp_dict["prob"] = self.distanza_malvagia(splitted_phrase[0], data[0][j])
+            tmp_state.append(tmp_dict)
+        vit_struct.append(tmp_state)
+
+        for i in range(1,len(data)):
+            tmp_state = []
+            for j in range(self.neighbors):
+                tmp_dict = {}
+                tmp_dict["best_pred"] = 0
+                tmp_dict["prob"] = 0
+                for k in range(self.neighbors):
+                    prob = vit_struct[i-1][k]["prob"] * \
+                        self.prior_generator.get_word_successor(data[i-1][k], data[i][j]) * \
+                        self.distanza_malvagia(splitted_phrase[i],data[i][j])
+                    if tmp_dict["prob"]  < prob:
+                        tmp_dict["prob"] = prob
+                        tmp_dict["best_pred"] = k
+                tmp_state.append(tmp_dict)
+            vit_struct.append(tmp_state)
+        ret = ["" for x in range(len(data))]
+        tmp_max = 0
+        max_pos = -1
+        for x in range(0,self.neighbors):
+            if tmp_max < vit_struct[-1][x]["prob"]:
+                max_pos = x
+                tmp_max = vit_struct[-1][x]["prob"]
+        for x in range(len(data)-1, -1, -1):
+            ret[x] = data[x][max_pos]
+            max_pos = vit_struct[x][max_pos]["best_pred"]
+        return ret   

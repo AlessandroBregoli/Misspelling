@@ -11,10 +11,10 @@ p.analize_freq("dataset/lotr2.txt")
 p.analize_freq("dataset/lotr3.txt")
 p.finalize()
 print("ok")
-v = hyperviterbi.Hyperviterbi(p, 10)
+v = hyperviterbi.Hyperviterbi(p, 5)
 
 while True:
     print("> ",end="")
-    parola = input()
-    print(v.find_neighbors(parola))
+    phrase = input()
+    print(v.viterbi(phrase))
 

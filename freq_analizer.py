@@ -87,3 +87,11 @@ class PriorGenerator:
                  "Word_successor": self.word_successor}
         with open(path,"w") as outFile:
             json.dump(tmp_dic,outFile)
+    
+    def deserialize(self, path):
+        with open(path) as inFile:
+            tmp_dic = json.load(inFile)
+            self.dictionary = tmp_dic["Dictionary"]
+            self.freq = tmp_dic["Freq"]
+            self.successor = tmp_dic["Successor"]
+            self.word_successor = tmp_dic["Word_successor"]

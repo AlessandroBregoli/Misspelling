@@ -15,7 +15,11 @@ class Hyperviterbi:
         l_dist = []
         max_dist = 5000 #TODO: mettere un valore sensato tipo max int
         worst_word_id = -1
+        maxdeltal = 2
         for w in self.prior_generator.dictionary:
+            deltal = abs(len(w) - len(word))
+            if deltal >= maxdeltal: 
+                continue
             dist = Levenshtein.distance(word, w)
             if len(l_words) < self.neighbors:
                 l_words.append(w)

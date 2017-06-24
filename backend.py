@@ -7,21 +7,26 @@ app = Flask(__name__)
 
 def get_prior_generator():
     priorGenerator = getattr(g,"PriorGenerator",None)
-    if priorGenerator in None:
+    if priorGenerator is None:
         priorGenerator = g.PriorGenerator = PriorGenerator(1e-20)
         priorGenerator.deserialize("freq_analized.json")
     return priorGenerator
 
 
-@app.route('/viterbi', method=['POST'])
+@app.route('/viterbi', methods=['POST'])
 def viterbi():
-    pre_analized = json.load(request.form['mat'])
-    phrase = json.load(request.form['phrase'])
+    js = request.get_json(force=True)
+    pre_analized = js['mat']
+    phrase = js['phrase']
     priorGenerator = get_prior_generator()
-    v = Hyperviterbi(phrase, 25)
+    v = Hyperviterbi(priorGenerator, 25)
     corrected_phrase = v.viterbi(phrase, pre_analized)
     ret_dic = {"mat":pre_analized,"viterbi":corrected_phrase}
-    return json.dump(ret_dic)
-    
+    return json.dumps(ret_dic)
+
+@app.route('/')
+def root():
+    with open("ui_spastica/index.html", "r") as f:
+        return f.read()
 
 app.run()

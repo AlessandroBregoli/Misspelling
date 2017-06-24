@@ -152,6 +152,7 @@
                 }
                 var ajax = new XMLHttpRequest();
                 ajax.onreadystatechange = function() {
+                    console.log(this.readyState)
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
                         var resp = JSON.parse(this.responseText);
@@ -162,8 +163,8 @@
                         log(resp['viterbi'])
                     }
                 }
-                ajax.open("POST", "localhost:3714/viterbi", true);
-                ajax.send(req);
+                ajax.open("POST", "/viterbi", true);
+                ajax.send(JSON.stringify(req));
             }
         </script>
     </body>

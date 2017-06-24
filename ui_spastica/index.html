@@ -8,7 +8,7 @@
                 font-size: 20px;
             }
             #typing {
-                width: 80ch;
+                width: 100%;
                 top: 30px;
                 height: 30px;
                 border: 1px solid #ccc;
@@ -35,10 +35,11 @@
             }
             #tooltip {
                 position: absolute;
-                top: 65px;
+                top: 67px;
                 left: 5ch;
                 border: 1px solid #ccc;
                 width: auto;
+                visibility: hidden;
             }
             #suggestions {
                 list-style: none;
@@ -48,16 +49,21 @@
             #provalarghezza {
                 position: absolute;
                 visibility: hidden;
+                display: block;
+                width: 1ch;
             }
         </style>
     </head>
     <body>
         <h3>qualcosa</h3>
-        <span id="provalarghezza">0</span>
+        <div id="provalarghezza"></div>
         <div style="width: auto; left:5ch; right: 5ch; position: absolute;">
             <input type="text" id="typing">
         </div>
-        <div id="tooltip"><ul id="suggestions"><li>Ciao</li><li>a</li><li>tutti</li></ul></div>
+        <div id="tooltip"><ul id="suggestions">
+            <li>Tanti</li>
+            <li>bei</li>
+            <li>suggerimenti</li></ul></div>
         <div id="log"></div>
         <script type="text/javascript">
             var ldiv = document.getElementById("log");
@@ -73,6 +79,7 @@
             var typ = document.getElementById("typing");
             var chWidth = document.getElementById("provalarghezza").offsetWidth;
             log(chWidth);
+            var tt = document.getElementById("tooltip");
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
                 var text = typ.value;
@@ -88,17 +95,21 @@
                 }
                 var wnumb = wcount - 1;
                 var word = words[wnumb];
-                if (word == "")
+                if (word == ""){
+                    tt.style.visibility = "hidden";
                     return;
+                }
                 log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
                 tooltip(wstart, word, cpos == text.length);
             })
-            var tt = document.getElementById("tooltip");
             function tooltip(wstart, word, fine) {
+                tt.style.visibility = "visible";
                 log(typ.scrollLeft / chWidth);
                 if (typ.scrollLeft > 0.1) {
                     wstart -= (typ.scrollLeft / chWidth);
                 }
+                if (wstart < 0)
+                    wstart = 0;
                 tt.style.left = (5 + wstart) + "ch";
             }
         </script>

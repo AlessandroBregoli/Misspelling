@@ -155,6 +155,7 @@
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
                         var resp = JSON.parse(this.responseText);
+                        console.log(resp)
                         pop_tooltip(resp['mat'][wnumb], wstart, word);
                         mat = resp['mat'];
                         tooltip(wstart);

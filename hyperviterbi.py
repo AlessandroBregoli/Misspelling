@@ -77,17 +77,18 @@ class Hyperviterbi:
 
     #This function split the phrase using the space character; can be enanched considering
     #the possibility of multiple words without space or words splitted in two parts
-    def pre_viterbi(self, pharase):
-        ret = []
-        for x in pharase.split():
-            ret.append(self.find_neighbors(x))
+    def pre_viterbi(self, pharase, pre_analized):
+        ret = pre_analized
+        splitted = pharase.split() 
+        for x in range(len(ret), len(splitted)):
+            ret.append(self.find_neighbors(splitted[x]))
         return ret
 
-    def viterbi(self, phrase):
+    def viterbi(self, phrase, pre_analized):
         #frase minuscola
         phrase = phrase.lower()
         #estraggo parole più vicine del dizionario
-        data = self.pre_viterbi(phrase)
+        data = self.pre_viterbi(phrase, pre_analized)
         #divido frase in parole
         splitted_phrase = phrase.split()
         vit_struct = [] #conterrà la bella di viterbi
@@ -96,7 +97,7 @@ class Hyperviterbi:
         #e l'indice del predecessore
 
         #calcolo la prima colonna
-        for j in range(0,self.neighbors):
+        for j in range(len(data[0])):
             tmp_dict = {}
             tmp_dict["best_pred"] = 0
             tmp_dict["prob"] = self.distanza_malvagia(splitted_phrase[0], data[0][j])
@@ -108,13 +109,13 @@ class Hyperviterbi:
         for i in range(1, len(data)):
             tmp_state = []
             #ciclo sulle righe della colonna
-            for j in range(self.neighbors):
+            for j in range(len(data[i])):
                 tmp_dict = {}
                 #inizializzo a 0 i campi della cella
                 tmp_dict["best_pred"] = 0
                 tmp_dict["prob"] = 0
                 #ciclo sulle celle della colonna
-                for k in range(self.neighbors):
+                for k in range(len(data[i-1])):
                     #ciclo sulle celle della colonna precedente
                     #per trove il predecessore più probabile
                     prob = vit_struct[i - 1][k]["prob"] * \

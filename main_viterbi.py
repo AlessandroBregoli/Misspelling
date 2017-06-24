@@ -12,5 +12,5 @@ v = hyperviterbi.Hyperviterbi(p, 25)
 while True:
     print("> ",end="")
     phrase = input()
-    print(v.viterbi(phrase))
+    print(v.viterbi(phrase, []))
 

@@ -103,17 +103,20 @@
                 }
                 var wnumb = wcount - 1;
                 word = words[wnumb];
-                if (word == ""){
+                if (word == "" || word == undefined){
                     tt.style.visibility = "hidden";
                     return;
                 }
-                log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
+                typ.wstart = wstart;
+                //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
                 pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
-                tooltip(wstart, word, cpos == text.length);
+                tooltip(wstart);
             })
-            function tooltip(wstart, word, fine) {
+            typ.addEventListener("scroll", function() {
+                tooltip(this.wstart);
+            })
+            function tooltip(wstart) {
                 tt.style.visibility = "visible";
-                log(typ.scrollLeft / chWidth);
                 if (typ.scrollLeft > 0.1) {
                     wstart -= (typ.scrollLeft / chWidth);
                 }

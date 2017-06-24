@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Correttore</title>
+        <style type="text/css">
+            body, #typing {
+                font-family: monospace;
+                font-size: 20px;
+            }
+            #typing {
+                width: 80%;
+                position: absolute;
+                left: 10%;
+                top: 10%;
+                height: 30px;
+            }
+            #log {
+                white-space: pre;
+                position: absolute;
+                bottom: 0;
+                left: 0; right: 0;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                height: 40%;
+                background: #002b36;
+                color: #eee8d5;
+                padding: 5px;
+            }
+            h1 {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>qualcosa</h1>
+        <div style="width: 80%; margin: auto;">
+            <input type="text" id="typing">
+        </div>
+        <div id="log"></div>
+        <script type="text/javascript">
+            function log(str, end){
+                if(end == undefined){
+                    end = "\n";
+                }
+                var txt = document.createTextNode(str + end);
+                document.getElementById("log").appendChild(txt);
+            }
+            log("Correttore spastico v 0.0");
+            var typ = document.getElementById("typing");
+            typ.addEventListener("input", function(){
+                var cpos = this.selectionStart;
+                log("edit, posizione: " + cpos);
+            })
+        </script>
+    </body>
+</html>

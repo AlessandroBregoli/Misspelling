@@ -86,7 +86,6 @@
             log("Correttore spastico v 0.0");
             var typ = document.getElementById("typing");
             var chWidth = document.getElementById("provalarghezza").offsetWidth;
-            log(chWidth);
             var tt = document.getElementById("tooltip");
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
@@ -109,8 +108,8 @@
                 }
                 typ.wstart = wstart;
                 //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
-                pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
-                tooltip(wstart);
+                //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
+                ask(text, word, wnumb, wstart)
             })
             typ.addEventListener("scroll", function() {
                 tooltip(this.wstart);
@@ -144,6 +143,27 @@
                 tt.style.visibility = "hidden";
                 typ.focus();
                 typ.selectionStart  = typ.selectionEnd = wstart + nword.length;
+            }
+            var mat = [];
+            function ask (phrase, word, wnumb, wstart) {
+                var req = {
+                    "phrase" : phrase.substring(0, wstart + word.length),
+                    "mat" : mat.slice(0, wnumb)
+                }
+                var ajax = new XMLHttpRequest();
+                ajax.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready
+                        var resp = JSON.parse(this.responseText);
+                        console.log(resp)
+                        pop_tooltip(resp['mat'][wnumb], wstart, word);
+                        mat = resp['mat'];
+                        tooltip(wstart);
+                        log(resp['viterbi'])
+                    }
+                }
+                ajax.open("POST", "localhost:3714/viterbi", true);
+                ajax.send(req);
             }
         </script>
     </body>

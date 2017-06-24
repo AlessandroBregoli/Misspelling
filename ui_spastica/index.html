@@ -43,14 +43,22 @@
             }
             #suggestions {
                 list-style: none;
-                margin: 0px;
-                padding: 2px;
+                margin: 0;
+                padding: 0;
             }
             #provalarghezza {
                 position: absolute;
                 visibility: hidden;
                 display: block;
                 width: 1ch;
+            }
+            #suggestions li {
+                margin: 0;
+                padding: 2px;
+                cursor: pointer;
+            }
+            #suggestions li:hover {
+                background-color: #eee;
             }
         </style>
     </head>
@@ -83,7 +91,7 @@
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
                 var text = typ.value;
-
+                var word = "";
                 var words = text.split(" ")
                 var scanpos = 0;
                 var wcount = 0;
@@ -94,12 +102,13 @@
                     wcount += 1;
                 }
                 var wnumb = wcount - 1;
-                var word = words[wnumb];
+                word = words[wnumb];
                 if (word == ""){
                     tt.style.visibility = "hidden";
                     return;
                 }
                 log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
+                pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
                 tooltip(wstart, word, cpos == text.length);
             })
             function tooltip(wstart, word, fine) {
@@ -111,6 +120,27 @@
                 if (wstart < 0)
                     wstart = 0;
                 tt.style.left = (5 + wstart) + "ch";
+            }
+            var sugg = document.getElementById("suggestions");
+            function pop_tooltip (parole, wstart, word) {
+                sugg.innerHTML = "";
+                for (var x in parole) {
+                    var li = document.createElement("li");
+                    li.innerHTML = parole[x];
+                    add_click_event(li, wstart, word, parole[x]);
+                    sugg.appendChild(li);
+                }
+            }
+            function add_click_event(li, wstart, word, parola) {
+                li.addEventListener("click", function() {
+                    subst_word(wstart, word, parola);
+                })
+            }
+            function subst_word(wstart, word, nword) {
+                typ.value = typ.value.substring(0, wstart) + nword + typ.value.substring(wstart + word.length)
+                tt.style.visibility = "hidden";
+                typ.focus();
+                typ.selectionStart  = typ.selectionEnd = wstart + nword.length;
             }
         </script>
     </body>

@@ -141,4 +141,9 @@ class Hyperviterbi:
         for x in range(len(data) - 1, -1, -1):
             ret[x] = data[x][max_pos]
             max_pos = vit_struct[x][max_pos]["best_pred"]
+        
+        ordered_word_list = data[-1]
+        last_prob_list = [x["prob"] for x in vit_struct[-1]]
+        _, ordered_word_list =  zip(*sorted(zip(last_prob_list, ordered_word_list), reverse=True))
+        data[-1] = ordered_word_list
         return ret

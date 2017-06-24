@@ -4,11 +4,11 @@ from hyperviterbi import Hyperviterbi
 from freq_analizer import PriorGenerator
 
 app = Flask(__name__)
-
+priorGenerator = None 
 def get_prior_generator():
-    priorGenerator = getattr(g,"PriorGenerator",None)
+    global priorGenerator
     if priorGenerator is None:
-        priorGenerator = g.PriorGenerator = PriorGenerator(1e-20)
+        priorGenerator = PriorGenerator(1e-20)
         priorGenerator.deserialize("freq_analized.json")
     return priorGenerator
 

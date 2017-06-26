@@ -69,9 +69,7 @@
             <input type="text" id="typing">
         </div>
         <div id="tooltip"><ul id="suggestions">
-            <li>Tanti</li>
-            <li>bei</li>
-            <li>suggerimenti</li></ul></div>
+            <li>Caricamento...</li></ul></div>
         <div id="log"></div>
         <script type="text/javascript">
             var ldiv = document.getElementById("log");
@@ -110,6 +108,7 @@
                 //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
                 //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
                 ask(text, word, wnumb, wstart)
+                //tooltip(this.wstart)
             })
             typ.addEventListener("scroll", function() {
                 tooltip(this.wstart);
@@ -145,7 +144,11 @@
                 typ.selectionStart  = typ.selectionEnd = wstart + nword.length;
             }
             var mat = [];
+            var lock = 0;
             function ask (phrase, word, wnumb, wstart) {
+            	if (lock != 0)
+            	    return;
+            	lock = 1;
                 var req = {
                     "phrase" : phrase.substring(0, wstart + word.length),
                     "mat" : mat.slice(0, wnumb)
@@ -157,10 +160,12 @@
                         // Typical action to be performed when the document is ready
                         var resp = JSON.parse(this.responseText);
                         console.log(resp)
-                        pop_tooltip(resp['mat'][wnumb], wstart, word);
+                        pop_tooltip(resp['mat'][wnumb].slice(0,10), wstart, word);
                         mat = resp['mat'];
                         tooltip(wstart);
                         log(resp['viterbi'])
+                        tooltip(wstart);
+                        lock = 0;
                     }
                 }
                 ajax.open("POST", "/viterbi", true);

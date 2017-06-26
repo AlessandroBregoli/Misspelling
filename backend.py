@@ -13,6 +13,9 @@ def get_prior_generator():
         priorGenerator.load_stop_symbols_from_file("stop_symbols.txt")
     return priorGenerator
 
+@app.route('/stop_symbols')
+def get_stop_symbols():
+     return json.dumps(get_prior_generator().stopSymbols)
 
 @app.route('/viterbi', methods=['POST'])
 def viterbi():

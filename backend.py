@@ -19,7 +19,7 @@ def viterbi():
     pre_analized = js['mat']
     phrase = js['phrase']
     priorGenerator = get_prior_generator()
-    v = Hyperviterbi(priorGenerator, 25)
+    v = Hyperviterbi(priorGenerator, 10)
     corrected_phrase = v.viterbi(phrase, pre_analized)
     ret_dic = {"mat":pre_analized,"viterbi":corrected_phrase}
     return json.dumps(ret_dic)

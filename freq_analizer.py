@@ -18,11 +18,11 @@ class PriorGenerator:
     def load_stop_symbols_from_file(self, path):
         with open(path) as file:
             for x in file.readlines():
-                self.stopSymbols.append(x.strip())
+                self.stopSymbols.append(x[:-1])
     
     def remove_stop_symbols(self, line):
         for x in self.stopSymbols:
-            line = line.replace(x, "")
+            line = line.replace(x, " ")
         return line
     
     def analize_freq(self, path):

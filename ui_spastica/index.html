@@ -123,25 +123,26 @@
                 tt.style.left = (5 + wstart) + "ch";
             }
             var sugg = document.getElementById("suggestions");
-            function pop_tooltip (parole, wstart, word) {
+            function pop_tooltip (parole, wstart, word, wnumb) {
                 sugg.innerHTML = "";
                 for (var x in parole) {
                     var li = document.createElement("li");
                     li.innerHTML = parole[x];
-                    add_click_event(li, wstart, word, parole[x]);
+                    add_click_event(li, wstart, word, parole[x], wnumb);
                     sugg.appendChild(li);
                 }
             }
-            function add_click_event(li, wstart, word, parola) {
+            function add_click_event(li, wstart, word, parola, wnumb) {
                 li.addEventListener("click", function() {
-                    subst_word(wstart, word, parola);
+                    subst_word(wstart, word, parola, wnumb);
                 })
             }
-            function subst_word(wstart, word, nword) {
-                typ.value = typ.value.substring(0, wstart) + nword + typ.value.substring(wstart + word.length)
+            function subst_word(wstart, word, new_word, wnumb) {
+                typ.value = typ.value.substring(0, wstart) + new_word + typ.value.substring(wstart + word.length)
                 tt.style.visibility = "hidden";
                 typ.focus();
-                typ.selectionStart  = typ.selectionEnd = wstart + nword.length;
+                typ.selectionStart  = typ.selectionEnd = wstart + new_word.length;
+                mat[wnumb] = [new_word];
             }
             var mat = [];
             var lock = 0;
@@ -155,12 +156,10 @@
                 }
                 var ajax = new XMLHttpRequest();
                 ajax.onreadystatechange = function() {
-                    console.log(this.readyState)
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
                         var resp = JSON.parse(this.responseText);
-                        console.log(resp)
-                        pop_tooltip(resp['mat'][wnumb].slice(0,10), wstart, word);
+                        pop_tooltip(resp['mat'][wnumb].slice(0,10), wstart, word, wnumb);
                         mat = resp['mat'];
                         tooltip(wstart);
                         log(resp['viterbi'])

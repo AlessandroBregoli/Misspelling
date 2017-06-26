@@ -87,7 +87,11 @@
             var tt = document.getElementById("tooltip");
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
-                var text = typ.value;
+                var text = this.value;
+                try {
+                	if (text[cpos-1] == " ")
+                    return;
+                } catch{}
                 var word = "";
                 var words = text.split(" ")
                 var scanpos = 0;
@@ -99,6 +103,7 @@
                     wcount += 1;
                 }
                 var wnumb = wcount - 1;
+                
                 word = words[wnumb];
                 if (word == "" || word == undefined){
                     tt.style.visibility = "hidden";
@@ -170,6 +175,15 @@
                 ajax.open("POST", "/viterbi", true);
                 ajax.send(JSON.stringify(req));
             }
+            var stop_symbols = [];
+            function load_stop_symbols () {
+                var ajax = new XMLHttpRequest()
+                ajax.open("GET", "/stop_symbols", false)
+                ajax.send()
+                console.log(this.responseText)
+                stop_symbols = JSON.parse(this.responseText)
+            }
+            load_stop_symbols()
         </script>
     </body>
 </html>

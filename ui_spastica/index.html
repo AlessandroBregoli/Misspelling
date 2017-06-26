@@ -88,10 +88,13 @@
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
                 var text = this.value;
-                try {
-                	if (text[cpos-1] == " ")
-                    return;
-                } catch{}
+                for (var ss in stop_symbols) {
+                    try{
+                        if (text[cpos - 1] == stop_symbols[ss]){
+                            return;
+                        }
+                    } catch(e){}
+                }
                 var word = "";
                 var words = text.split(" ")
                 var scanpos = 0;
@@ -178,10 +181,14 @@
             var stop_symbols = [];
             function load_stop_symbols () {
                 var ajax = new XMLHttpRequest()
-                ajax.open("GET", "/stop_symbols", false)
+                ajax.open("GET", "/stop_symbols", true)
+                ajax.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        stop_symbols = JSON.parse(this.responseText)
+                        stop_symbols.push(" ")
+                    }
+                }
                 ajax.send()
-                console.log(this.responseText)
-                stop_symbols = JSON.parse(this.responseText)
             }
             load_stop_symbols()
         </script>

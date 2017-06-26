@@ -10,6 +10,7 @@ def get_prior_generator():
     if priorGenerator is None:
         priorGenerator = PriorGenerator(1e-20)
         priorGenerator.deserialize("freq_analized.json")
+        priorGenerator.load_stop_symbols_from_file("stop_symbols.txt")
     return priorGenerator
 
 

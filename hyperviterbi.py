@@ -11,6 +11,8 @@ class Hyperviterbi:
         self.neighbors = neighbors
 
     def find_neighbors(self, word):
+        word = self.prior_generator.remove_stop_symbols(word)
+        word = word.strip()
         l_words = []
         l_dist = []
         max_dist = 5000 #TODO: mettere un valore sensato tipo max int

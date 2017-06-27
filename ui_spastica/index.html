@@ -136,6 +136,7 @@
                 for (var x in parole) {
                     var li = document.createElement("li");
                     li.innerHTML = parole[x];
+                    li.setAttribute("tabindex",5);
                     add_click_event(li, wstart, word, parole[x], wnumb);
                     sugg.appendChild(li);
                 }
@@ -163,7 +164,7 @@
                     "mat" : mat.slice(0, wnumb)
                 }
                 var ajax = new XMLHttpRequest();
-                ajax.onreadystatechange = function() {ù
+                ajax.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
                         lock = 0

@@ -89,6 +89,7 @@
             var chWidth = document.getElementById("provalarghezza").offsetWidth;
             var tt = document.getElementById("tooltip");
             var glob_word = "";
+            var invalida = false;
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
                 var text = this.value;
@@ -122,6 +123,14 @@
                 //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
                 if (!lock) {
                     ask(text, word, wnumb, wstart)
+                } else {
+                    invalida = true;
+                    while (mat.length <= wnumb){
+                        mat.push([])
+                    }
+                    var tmp = mat[wnumb].slice(0,3)
+                    tmp.push(word)
+                    pop_tooltip(tmp, wstart, word, wnumb);
                 }
                 //tooltip(this.wstart)
             })
@@ -175,9 +184,13 @@
                         // Typical action to be performed when the document is ready
                         lock = 0
                         var resp = JSON.parse(this.responseText)
-                        var tmp = resp['mat'][wnumb].slice(0,3)
-                        tmp.push(word)
-                        pop_tooltip(tmp, wstart, word, wnumb);
+                        if(!invalida) {
+                            var tmp = resp['mat'][wnumb].slice(0,3)
+                            tmp.push(word)
+                            pop_tooltip(tmp, wstart, word, wnumb);
+                        } else {
+                            invalida = false;
+                        }
                         mat = resp['mat']
                         tooltip(wstart)
                         log(resp['viterbi'].join(" "))

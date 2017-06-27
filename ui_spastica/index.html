@@ -52,12 +52,15 @@
                 display: block;
                 width: 1ch;
             }
-            #suggestions li {
+            #suggestions a {
+                display:block;
                 margin: 0;
                 padding: 2px;
                 cursor: pointer;
+                color: #000;
+                text-decoration: none;
             }
-            #suggestions li:hover {
+            #suggestions a:hover {
                 background-color: #eee;
             }
         </style>
@@ -66,7 +69,7 @@
         <h3>qualcosa</h3>
         <div id="provalarghezza"></div>
         <div style="width: auto; left:5ch; right: 5ch; position: absolute;">
-            <input type="text" id="typing">
+            <input type="text" tabindex="5" id="typing">
         </div>
         <div id="tooltip"><ul id="suggestions">
             <li>Caricamento...</li></ul></div>
@@ -85,6 +88,7 @@
             var typ = document.getElementById("typing");
             var chWidth = document.getElementById("provalarghezza").offsetWidth;
             var tt = document.getElementById("tooltip");
+            var glob_word = "";
             typ.addEventListener("input", function(){
                 var cpos = this.selectionStart;
                 var text = this.value;
@@ -113,9 +117,12 @@
                     return;
                 }
                 typ.wstart = wstart;
+                glob_word = word;
                 //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
                 //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
-                ask(text, word, wnumb, wstart)
+                if (!lock) {
+                    ask(text, word, wnumb, wstart)
+                }
                 //tooltip(this.wstart)
             })
             typ.addEventListener("scroll", function() {
@@ -131,23 +138,24 @@
                 tt.style.left = (5 + wstart) + "ch";
             }
             var sugg = document.getElementById("suggestions");
-            function pop_tooltip (parole, wstart, word, wnumb) {
+            function pop_tooltip (parole, wstart, wnumb) {
                 sugg.innerHTML = "";
                 for (var x in parole) {
-                    var li = document.createElement("li");
+                    var li = document.createElement("a");
+                    li.setAttribute("href", "#")
                     li.innerHTML = parole[x];
-                    li.setAttribute("tabindex",5);
-                    add_click_event(li, wstart, word, parole[x], wnumb);
+                    li.setAttribute("tabindex",6);
+                    add_click_event(li, wstart,  parole[x], wnumb);
                     sugg.appendChild(li);
                 }
             }
-            function add_click_event(li, wstart, word, parola, wnumb) {
+            function add_click_event(li, wstart, parola, wnumb) {
                 li.addEventListener("click", function() {
-                    subst_word(wstart, word, parola, wnumb);
+                    subst_word(wstart,  parola, wnumb);
                 })
             }
-            function subst_word(wstart, word, new_word, wnumb) {
-                typ.value = typ.value.substring(0, wstart) + new_word + typ.value.substring(wstart + word.length)
+            function subst_word(wstart, new_word, wnumb) {
+                typ.value = typ.value.substring(0, wstart) + new_word + typ.value.substring(wstart + glob_word.length)
                 tt.style.visibility = "hidden";
                 typ.focus();
                 typ.selectionStart  = typ.selectionEnd = wstart + new_word.length;
@@ -156,8 +164,6 @@
             var mat = [];
             var lock = 0;
             function ask (phrase, word, wnumb, wstart) {
-            	if (lock != 0)
-            	    return;
             	lock = 1;
                 var req = {
                     "phrase" : phrase.substring(0, wstart + word.length),

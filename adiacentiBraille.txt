@@ -1,5 +1,3 @@
-Una lettera è adiacente se ha un punto in più o in meno
-
 abce1k
 bfhl2a,
 cdfm3a"

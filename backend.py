@@ -37,4 +37,7 @@ def viterbi(input_type):
 @app.route('/')
 def home():
     return redirect(url_for('static', filename='index.html'))
+@app.route('/braille')
+def braille():
+    return redirect(url_for('static', filename='braille.html'))
 app.run(host="0.0.0.0")

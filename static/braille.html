@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Correttore</title>
+        <link rel="stylesheet" type="text/css" href="default.css">
+    </head>
+    <body>
+        <h3>Correttore</h3>
+        <div id="provalarghezza"></div>
+        <div style="width: auto; left:5ch; right: 5ch; position: absolute;">
+            <input type="text" tabindex="5" id="typing">
+        </div>
+        <div id="tooltip"><ul id="suggestions">
+            <li>Caricamento...</li></ul></div>
+        <div id="log"></div>
+        <script type="text/javascript">
+            var input_model = "braille";
+        </script>
+        <script type="text/javascript" src="correttore.js"></script>
+    </body>
+</html>

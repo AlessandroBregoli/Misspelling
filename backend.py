@@ -33,4 +33,4 @@ def root():
     with open("ui_spastica/index.html", "r") as f:
         return f.read()
 
-app.run()
+app.run(host="0.0.0.0")

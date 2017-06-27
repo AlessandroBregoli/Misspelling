@@ -163,16 +163,18 @@
                     "mat" : mat.slice(0, wnumb)
                 }
                 var ajax = new XMLHttpRequest();
-                ajax.onreadystatechange = function() {
+                ajax.onreadystatechange = function() {ù
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
-                        var resp = JSON.parse(this.responseText);
-                        pop_tooltip(resp['mat'][wnumb].slice(0,10), wstart, word, wnumb);
-                        mat = resp['mat'];
-                        tooltip(wstart);
-                        log(resp['viterbi'])
-                        tooltip(wstart);
-                        lock = 0;
+                        lock = 0
+                        var resp = JSON.parse(this.responseText)
+                        var tmp = resp['mat'][wnumb].slice(0,3)
+                        tmp.push(word)
+                        pop_tooltip(tmp, wstart, word, wnumb);
+                        mat = resp['mat']
+                        tooltip(wstart)
+                        log(resp['viterbi'].join(" "))
+                        tooltip(wstart)
                     }
                 }
                 ajax.open("POST", "/viterbi", true);
@@ -183,6 +185,7 @@
                 var ajax = new XMLHttpRequest()
                 ajax.open("GET", "/stop_symbols", true)
                 ajax.onreadystatechange = function() {
+                    console.log(this.readyState)
                     if (this.readyState == 4 && this.status == 200) {
                         stop_symbols = JSON.parse(this.responseText)
                         stop_symbols.push(" ")

@@ -120,7 +120,7 @@
                 glob_word = word;
                 //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
                 //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
-                if (!lock) {
+                if (true) {
                     ask(text, word, wnumb, wstart)
                 }
                 //tooltip(this.wstart)
@@ -162,18 +162,18 @@
                 mat[wnumb] = [new_word];
             }
             var mat = [];
-            var lock = 0;
+            var ajax = null;
             function ask (phrase, word, wnumb, wstart) {
-            	lock = 1;
+                if(ajax != null)
+                    ajax.abort();
                 var req = {
                     "phrase" : phrase.substring(0, wstart + word.length),
                     "mat" : mat.slice(0, wnumb)
                 }
-                var ajax = new XMLHttpRequest();
+                ajax = new XMLHttpRequest();
                 ajax.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         // Typical action to be performed when the document is ready
-                        lock = 0
                         var resp = JSON.parse(this.responseText)
                         var tmp = resp['mat'][wnumb].slice(0,3)
                         tmp.push(word)
@@ -182,6 +182,7 @@
                         tooltip(wstart)
                         log(resp['viterbi'].join(" "))
                         tooltip(wstart)
+                        ajax = null;
                     }
                 }
                 ajax.open("POST", "/viterbi", true);

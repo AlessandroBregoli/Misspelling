@@ -1,4 +1,4 @@
-from flask import Flask,request, g
+from flask import Flask,request, g, url_for, redirect
 import json
 from hyperviterbi import Hyperviterbi
 from freq_analizer import PriorGenerator
@@ -29,8 +29,6 @@ def viterbi():
     return json.dumps(ret_dic)
 
 @app.route('/')
-def root():
-    with open("ui/index.html", "r") as f:
-        return f.read()
-
+def home():
+    return redirect(url_for('static', filename='index.html'))
 app.run(host="0.0.0.0")

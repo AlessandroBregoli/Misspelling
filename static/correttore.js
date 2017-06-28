@@ -13,9 +13,10 @@ var chWidth = document.getElementById("provalarghezza").offsetWidth;
 var tt = document.getElementById("tooltip");
 var glob_word = "";
 var invalida = false;
-typ.addEventListener("input", function(){
-    var cpos = this.selectionStart;
-    var text = this.value;
+var timeout = null;
+var txt_edited = function(){
+    var cpos = typ.selectionStart;
+    var text = typ.value;
     for (var ss in stop_symbols) {
         try{
             if (text[cpos - 1] == stop_symbols[ss]){
@@ -44,9 +45,12 @@ typ.addEventListener("input", function(){
     glob_word = word;
     //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
     //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
+    clearTimeout(timeout)
     if (!lock) {
+        timeout = setTimeout(txt_edited, 100)
         ask(text, word, wnumb, wstart)
     } else {
+        timeout = setTimeout(txt_edited, 300)
         invalida = true;
         while (mat.length <= wnumb){
             mat.push([])
@@ -56,7 +60,9 @@ typ.addEventListener("input", function(){
         pop_tooltip(tmp, wstart, wnumb);
     }
     //tooltip(this.wstart)
-})
+}
+typ.addEventListener("input", txt_edited);
+
 typ.addEventListener("scroll", function() {
     tooltip(this.wstart);
 })

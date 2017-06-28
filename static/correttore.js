@@ -95,33 +95,31 @@ function subst_word(wstart, new_word, wnumb) {
 }
 var mat = [];
 var lock = 0;
+function max(a,b){
+    return a>b?a:b
+}
 function ask (phrase, word, wnumb, wstart) {
-    //lock = 1;
+    lock = 1;
     var req = {
         "phrase" : phrase.substring(0, wstart + word.length),
-        "mat" : mat.slice(0, wnumb)
+        "mat" : mat.slice(0, max(0, wnumb-1))
     }
     if (req["phrase"] == ""){
     	lock = 0;
     	return;
     }
-    var ajax = new XMLHttpRequest();
+    var ajax = new XMLHttpRequest()
     ajax.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             // Typical action to be performed when the document is ready
             lock = 0
             var resp = JSON.parse(this.responseText)
-            if(!invalida) {
+            	mat = resp['mat']
                 var tmp = resp['mat'][wnumb].slice(0,6)
                 tmp.push(word)
-                pop_tooltip(tmp, wstart, wnumb);
-            } else {
-                invalida = false;
-            }
-            mat = resp['mat']
-            tooltip(wstart)
+                pop_tooltip(tmp, wstart, wnumb)
+                tooltip(wstart)
             log(resp['viterbi'].join(" "))
-            tooltip(wstart)
         }
     }
     ajax.open("POST", "/viterbi/" + input_model, true);

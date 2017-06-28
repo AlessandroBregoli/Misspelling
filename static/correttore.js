@@ -14,6 +14,7 @@ var tt = document.getElementById("tooltip");
 var glob_word = "";
 var invalida = false;
 var timeout = null;
+typ.mustSetTimeout = 0;
 var txt_edited = function(){
     var cpos = typ.selectionStart;
     var text = typ.value;
@@ -45,12 +46,11 @@ var txt_edited = function(){
     glob_word = word;
     //log("edit, posizione: " + cpos + ", parola: " + word + ", wstart: " + wstart);
     //pop_tooltip([word, "pota", "non sai scrivere", "studia"], wstart, word);
-    clearTimeout(timeout)
+    var time = 200
     if (!lock) {
-        timeout = setTimeout(txt_edited, 100)
+        time = 50
         ask(text, word, wnumb, wstart)
     } else {
-        timeout = setTimeout(txt_edited, 300)
         invalida = true;
         while (mat.length <= wnumb){
             mat.push([])
@@ -59,7 +59,15 @@ var txt_edited = function(){
         tmp.push(word)
         pop_tooltip(tmp, wstart, wnumb);
     }
-    //tooltip(this.wstart)
+    clearTimeout(timeout)
+    if (this == typ){
+        typ.mustSetTimeout = 2 //volte
+    }
+    if(typ.mustSetTimeout > 0){
+        timeout = setTimeout(txt_edited, time)
+        typ.mustSetTimeout -= 1
+    }
+    tooltip(this.wstart)
 }
 typ.addEventListener("input", txt_edited);
 

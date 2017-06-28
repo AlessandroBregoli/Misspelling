@@ -89,6 +89,8 @@ class Hyperviterbi:
         return ret
 
     def viterbi(self, phrase, pre_analized):
+        if phrase == "" or phrase == None:
+            return []
         #frase minuscola
         phrase = phrase.lower()
         #estraggo parole più vicine del dizionario

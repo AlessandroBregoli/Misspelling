@@ -33,7 +33,10 @@ class Hyperviterbi:
         #     worst_word_id = l_dist.index(max_dist)
         # return l_words
        
-        return self.prior_generator.bk_tree.bounded_search(word,2,self.neighbors)
+        tmp = self.prior_generator.bk_tree.bounded_search(word,2,self.neighbors)
+        if tmp == []:
+            tmp.append(word)
+        return tmp
 
     def distanza_malvagia(self, s1, s2):
         """

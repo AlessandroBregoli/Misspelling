@@ -17,6 +17,7 @@ var timeout = null;
 typ.mustSetTimeout = 0;
 var txt_edited = function(){
     var cpos = typ.selectionStart;
+    typ.value = typ.value.replace(/\s+/g, " ")
     var text = typ.value;
     for (var ss in stop_symbols) {
         try{

@@ -51,7 +51,7 @@ typ.addEventListener("input", function(){
         while (mat.length <= wnumb){
             mat.push([])
         }
-        var tmp = mat[wnumb].slice(0,3)
+        var tmp = mat[wnumb].slice(0,6)
         tmp.push(word)
         pop_tooltip(tmp, wstart, wnumb);
     }
@@ -101,6 +101,10 @@ function ask (phrase, word, wnumb, wstart) {
         "phrase" : phrase.substring(0, wstart + word.length),
         "mat" : mat.slice(0, wnumb)
     }
+    if (req["phrase"] == ""){
+    	lock = 0;
+    	return;
+    }
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -108,7 +112,7 @@ function ask (phrase, word, wnumb, wstart) {
             lock = 0
             var resp = JSON.parse(this.responseText)
             if(!invalida) {
-                var tmp = resp['mat'][wnumb].slice(0,3)
+                var tmp = resp['mat'][wnumb].slice(0,6)
                 tmp.push(word)
                 pop_tooltip(tmp, wstart, wnumb);
             } else {

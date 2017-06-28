@@ -1,13 +1,16 @@
 import json
+from bktree import BKTree
 
 class PriorGenerator:
     def __init__(self, zero_to_alpha):
-        self.freq = {}
-        self.successor = {}
+        #self.freq = {}
+        #self.successor = {}
         self.word_successor = {}
         self.dictionary = set()
         self.stopSymbols = []
         self.zero_to_alpha = zero_to_alpha
+        self.bk_tree = BKTree()
+
     
     def get_word_successor(self, w1, w2):
         try:
@@ -34,24 +37,24 @@ class PriorGenerator:
                 line = line.lower()
                 
                 #Analizzo le frequenze
-                for i in range(len(line)):
-                    char = line[i]
-                    if (char > "z" or char < "a"):
-                        continue
-                    try:
-                        self.freq[char] += 1
-                    except:
-                        self.freq[char] = 1
-                    if i < len(line)-1:
-                        try:
-                            suc = self.successor[char]
-                            try:
-                                suc[line[i+1]] += 1
-                            except:
-                                suc[line[i+1]] = 1
-                        except:
-                            self.successor[char] = {}
-                            self.successor[char][line[i+1]] = 1
+                # for i in range(len(line)):
+                #     char = line[i]
+                #     if (char > "z" or char < "a"):
+                #         continue
+                #     try:
+                #         self.freq[char] += 1
+                #     except:
+                #         self.freq[char] = 1
+                #     if i < len(line)-1:
+                #         try:
+                #             suc = self.successor[char]
+                #             try:
+                #                 suc[line[i+1]] += 1
+                #             except:
+                #                 suc[line[i+1]] = 1
+                #         except:
+                #             self.successor[char] = {}
+                #             self.successor[char][line[i+1]] = 1
                 #Se non si lavora solo con l'inglese bisogna considerare anche gli apostrofi e simili
                 
                 #Analizzo le parole
@@ -71,20 +74,21 @@ class PriorGenerator:
                         
     
     def finalize(self):
-        tot = sum(self.freq.values())
-        for key in self.freq.keys():
-            self.freq[key] /= tot
-            tot2 = sum(self.successor[key].values())
-            for key2 in self.successor[key].keys():
-                self.successor[key][key2] /= tot2
+        #tot = sum(self.freq.values())
+        # for key in self.freq.keys():
+        #     self.freq[key] /= tot
+        #     tot2 = sum(self.successor[key].values())
+        #     for key2 in self.successor[key].keys():
+        #         self.successor[key][key2] /= tot2
         for key in self.word_successor.keys():
             tot = sum(self.word_successor[key].values())
             for key2 in self.word_successor[key].keys():
                 self.word_successor[key][key2] /= tot
+        for key in self.dictionary:
+            self.bk_tree.addWord(key)
         
     def serialize(self, path):
-        tmp_dic = {"Dictionary":list(self.dictionary), "Freq": self.freq, "Successor":self.successor,\
-                 "Word_successor": self.word_successor}
+        tmp_dic = {"Dictionary":list(self.dictionary), "Word_successor": self.word_successor, "BK_Tree": self.bk_tree.root}
         with open(path,"w") as outFile:
             json.dump(tmp_dic,outFile)
     
@@ -92,6 +96,8 @@ class PriorGenerator:
         with open(path) as inFile:
             tmp_dic = json.load(inFile)
             self.dictionary = tmp_dic["Dictionary"]
-            self.freq = tmp_dic["Freq"]
-            self.successor = tmp_dic["Successor"]
+            #self.freq = tmp_dic["Freq"]
+            #self.successor = tmp_dic["Successor"]
             self.word_successor = tmp_dic["Word_successor"]
+            self.bk_tree = BKTree()
+            self.bk_tree.root = tmp_dic["BK_Tree"]

@@ -11,27 +11,29 @@ class Hyperviterbi:
         self.neighbors = neighbors
 
     def find_neighbors(self, word):
-        word = self.prior_generator.remove_stop_symbols(word)
-        word = word.strip()
-        l_words = []
-        l_dist = []
-        max_dist = 5000 #TODO: mettere un valore sensato tipo max int
-        worst_word_id = -1
-        maxdeltal = 2
-        for w in self.prior_generator.dictionary:
-            deltal = abs(len(w) - len(word))
-            if deltal >= maxdeltal: 
-                continue
-            dist = Levenshtein.distance(word, w)
-            if len(l_words) < self.neighbors:
-                l_words.append(w)
-                l_dist.append(dist)
-            elif max_dist > dist:
-                l_words[worst_word_id] = w
-                l_dist[worst_word_id] = dist
-            max_dist = max(l_dist)
-            worst_word_id = l_dist.index(max_dist)
-        return l_words
+        # word = self.prior_generator.remove_stop_symbols(word)
+        # word = word.strip()
+        # l_words = []
+        # l_dist = []
+        # max_dist = 5000 #TODO: mettere un valore sensato tipo max int
+        # worst_word_id = -1
+        # maxdeltal = 2
+        # for w in self.prior_generator.dictionary:
+        #     deltal = abs(len(w) - len(word))
+        #     if deltal >= maxdeltal: 
+        #         continue
+        #     dist = Levenshtein.distance(word, w)
+        #     if len(l_words) < self.neighbors:
+        #         l_words.append(w)
+        #         l_dist.append(dist)
+        #     elif max_dist > dist:
+        #         l_words[worst_word_id] = w
+        #         l_dist[worst_word_id] = dist
+        #     max_dist = max(l_dist)
+        #     worst_word_id = l_dist.index(max_dist)
+        # return l_words
+       
+        return self.prior_generator.bk_tree.bounded_search(word,2,self.neighbors)
 
     def distanza_malvagia(self, s1, s2):
         """
@@ -135,7 +137,7 @@ class Hyperviterbi:
         tmp_max = 0
         max_pos = -1
         #trovo stato finale più probabile
-        for x in range(0, self.neighbors):
+        for x in range(0, len(vit_struct[-1])):
             if tmp_max < vit_struct[-1][x]["prob"]:
                 max_pos = x
                 tmp_max = vit_struct[-1][x]["prob"]

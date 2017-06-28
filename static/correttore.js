@@ -96,7 +96,7 @@ function subst_word(wstart, new_word, wnumb) {
 var mat = [];
 var lock = 0;
 function ask (phrase, word, wnumb, wstart) {
-    lock = 1;
+    //lock = 1;
     var req = {
         "phrase" : phrase.substring(0, wstart + word.length),
         "mat" : mat.slice(0, wnumb)

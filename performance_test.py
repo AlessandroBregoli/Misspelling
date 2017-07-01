@@ -36,7 +36,7 @@ with open("test_set.txt") as ts:
             line = line[:-1]
         line = line.lower()
         line = v.prior_generator.remove_stop_symbols(line)
-        perturbata  = perturba(line, 0.1, v.m_err)
+        perturbata  = perturba(line, 0, v.m_err)
         correzione = v.viterbi(perturbata, [])
         words = line.split()
         for i in range(len(words)):

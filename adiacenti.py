@@ -3,7 +3,7 @@ class ModelloErrore:
     p_inserzione = 0.05
     p_omissione = 0.02
     def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.92, ditone = 0.5):
-        spastico =  1 - azzecca - ditone
+        sbagliato =  1 - azzecca - ditone
         self.azzecca = azzecca
         adiacenza = {}
         vere = set()
@@ -29,6 +29,6 @@ class ModelloErrore:
                 if f in adiacenza[v]:
                     probs[v][f] = ditone / n_ad
                 else:
-                    probs[v][f] = spastico / (n_f - n_ad - 1)
+                    probs[v][f] = sbagliato / (n_f - n_ad - 1)
             probs[v][v] = azzecca
         self.probs = probs

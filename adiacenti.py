@@ -17,7 +17,11 @@ class ModelloErrore:
                 f = [ l[x] for x in range(1, len(l)) ]
                 adiacenza[vera] = f
                 false = false.union(set(f))
-
+        
+        self.vere = vere
+        self.false = false
+        self.adiacenza = adiacenza
+        self.lontane = { x : false.difference(adiacenza[x] + [x]) for x in vere}
         #print(adiacenza)
 
         probs = {x: {y: 0 for y in false} for x in vere}

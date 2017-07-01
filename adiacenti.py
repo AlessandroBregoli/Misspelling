@@ -4,6 +4,7 @@ class ModelloErrore:
     p_omissione = 0.02
     def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.92, ditone = 0.5):
         sbagliato =  1 - azzecca - ditone
+        self.ditone = ditone
         self.azzecca = azzecca
         adiacenza = {}
         vere = set()

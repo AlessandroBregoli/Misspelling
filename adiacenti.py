@@ -21,8 +21,8 @@ class ModelloErrore:
         
         self.vere = vere
         self.false = false
-        self.adiacenza = adiacenza
-        self.lontane = { x : false.difference(adiacenza[x] + [x]) for x in vere}
+        self.adiacenza = {x: set(adiacenza[x]).difference(["0","1","2","3","4","5","6","7","8","9"]) for x in adiacenza}
+        self.lontane = { x : false.difference(adiacenza[x] + [x,"0","1","2","3","4","5","6","7","8","9"]) for x in vere}
         #print(adiacenza)
 
         probs = {x: {y: 0 for y in false} for x in vere}
@@ -37,3 +37,4 @@ class ModelloErrore:
                     probs[v][f] = sbagliato / (n_f - n_ad - 1)
             probs[v][v] = azzecca
         self.probs = probs
+        

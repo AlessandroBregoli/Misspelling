@@ -1,5 +1,0 @@
--Usare i tweet non ci convince
--Dobbiamo seguire al 100% la specifica?
-    -Se si calcolano le probabilità sulle lettere e basta non è detto che quello che esca sia una parola di senso compiuto
-        Però se facciamo come suggerisce il paper l'hmm viene computato sulle parole e la probabilità di transizione è costante
--Braille

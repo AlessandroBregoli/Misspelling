@@ -2,7 +2,7 @@
 class ModelloErrore:
     p_inserzione = 0.05
     p_omissione = 0.02
-    def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.95, ditone = 0.03):
+    def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.92, ditone = 0.05):
         sbagliato =  1 - azzecca - ditone
         self.ditone = ditone
         self.azzecca = azzecca

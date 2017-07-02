@@ -9,6 +9,7 @@ class Hyperviterbi:
         self.m_err.calcola_adiacenze()
         self.prior_generator = prior_generator
         self.neighbors = neighbors
+        self.offline = False
 
     def find_neighbors(self, word):
         # word = self.prior_generator.remove_stop_symbols(word)
@@ -32,7 +33,10 @@ class Hyperviterbi:
         #     max_dist = max(l_dist)
         #     worst_word_id = l_dist.index(max_dist)
         # return l_words
-       
+        if self.offline:
+            tmp = self.prior_generator.bk_tree.bounded_search(word,0,self.neighbors)
+            if len(tmp) > 0:
+                return tmp
         tmp = self.prior_generator.bk_tree.bounded_search(word,2,self.neighbors)
         if tmp == []:
             tmp.append(word)

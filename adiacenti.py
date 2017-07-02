@@ -2,7 +2,7 @@
 class ModelloErrore:
     p_inserzione = 0.05
     p_omissione = 0.02
-    def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.92, ditone = 0.05):
+    def calcola_adiacenze(self, fname = "tasti_adiacenti.txt", azzecca = 0.95, ditone = 0.03):
         sbagliato =  1 - azzecca - ditone
         self.ditone = ditone
         self.azzecca = azzecca
@@ -21,8 +21,8 @@ class ModelloErrore:
         
         self.vere = vere
         self.false = false
-        self.adiacenza = {x: set(adiacenza[x]).difference(["0","1","2","3","4","5","6","7","8","9"]) for x in adiacenza}
-        self.lontane = { x : false.difference(adiacenza[x] + [x,"0","1","2","3","4","5","6","7","8","9"]) for x in vere}
+        self.adiacenza = {x: set(adiacenza[x]).difference(["0","1","2","3","4","5","6","7","8","9"," "]) for x in adiacenza}
+        self.lontane = { x : false.difference(adiacenza[x] + [x,"0","1","2","3","4","5","6","7","8","9", " "]) for x in vere}
         #print(adiacenza)
 
         probs = {x: {y: 0 for y in false} for x in vere}

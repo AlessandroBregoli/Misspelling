@@ -39,7 +39,7 @@
     Per semplicità grammaticale e lessicale abbiamo scelto la lingua inglese in quanto scarsa o priva di determinati simboli (accenti) e generi (maschile / 
     femminile).
     Inoltre abbiamo effettuato un’ulteriore scrematura non considerando simboli di punteggiatura e caratteri speciali quali “\#”, “-“, “@” e simili, ma 
-    considerando solamente lettere e numeri.
+    considerando solamente le lettere.
   \subsection{Contenuto del dataset}
     Come dataset abbiamo scelto di utilizzare una serie di romanzi in lingua inglese; i principali sono:
     \begin{itemize}
@@ -55,7 +55,7 @@
 \section{Scelte implementative}
 	\subsection{Strumenti software}
     	Abbiamo sviluppato il progetto in linguaggio Python per via della sua versatilità e della sua popolarità sia nell'ambito scientifico che in quello
-        professionale; inoltre abbiamo mantenuta separata la logica del progetto (ossia il correttore) dall'interfaccia utente che dunque può essere 
+        professionale; inoltre abbiamo mantenuto separata la logica del progetto (ossia il correttore) dall'interfaccia utente che dunque può essere 
         facilmente sostituita. L'interfaccia proposta è un'applicazione web scritta utilizzando HTML CSS e Javascript.
         
 	\subsection{Metodi di digitazione}
@@ -89,7 +89,7 @@
 	\subsection{Struttura della base di conoscenza}
     	La base di conoscenza contiene due strutture dati:
         \begin{itemize}
-        	\item Un dizionario contenente tutte le parole apprese dai libri nella frase di training
+        	\item Un dizionario contenente tutte le parole apprese dai libri nella fase di training
             \item Una matrice contenente per ogni parola la probabilità di essere seguita da una qualsiasi altra parola
         \end{itemize}
         \subsubsection{Dizionario}
@@ -98,7 +98,7 @@
             uguali in modo da poter ottenere probabili correzioni di una parola. Per ottenere tutto ciò è stato implementato un BK-Tree\cite{bktree} che risulta
             essere estremamente efficiente.
 		\subsubsection{Matrice di transizione}
-        	Questa matrice, data l'enorme dimensione del dizionario, è stata implementata come lista di liste; in questo modo si risparmia una enorme
+        	Questa matrice, data l'enorme dimensione del dizionario, è stata implementata come lista di liste; in questo modo si risparmia una grande
             quantità di spazio e si vanno a salvare solo le transizioni viste nel dataset. In fase di accesso se si richiede una transizione non
             presente nella "matrice" il sistema ritorna una probabilità $\varepsilon$ molto piccola in modo da non avere mai valori pari a 0 durante
             l'esecuzione di Viterbi.
@@ -143,7 +143,7 @@
   			\item la transizione è data dalla probabilità di una parola data la precedente, calcolata sul dataset.
  		\end{itemize}
         Ogni parola ha una probabilità di osservazione determinata dalla funzione di edit probability. L'utilizzo congiunto del modello di osservazione
-        e dell'hmm permettono una correzione dipendente dal contesto; tuttavia tale contesto è piuttosto limitato in quanto si parla di un HMM del primo ordine.
+        e dell'HMM permettono una correzione dipendente dal contesto; tuttavia tale contesto è piuttosto limitato in quanto si parla di un HMM del primo ordine.
         \subsubsection{Suggerimenti}
           Una volta che Viterbi viene eseguito la sequenza più probabile viene calcolata e rappresenta la correzione totale della frase da parte del metodo; 
           tuttavia il metodo espone anche dei suggerimenti per l'ultima parola andando ad ordinarli dalla più probabile alla meno probabile.

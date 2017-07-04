@@ -35,6 +35,17 @@
     anche noi un correttore automatico di parole.
 
 \end{frame}
+
+\begin{frame}{Assunzioni sul dataset}
+Per semplicità grammaticale e lessicale abbiamo scelto la lingua inglese in quanto scarsa o priva di determinati simboli (accenti) e generi (maschile / 
+femminile).
+Inoltre abbiamo effettuato un’ulteriore scrematura non considerando simboli di punteggiatura e caratteri speciali quali “\#”, “-“, “@” e simili, ma 
+considerando solamente lettere e numeri.
+
+La piccola modifica che abbiamo effettuato rispetto alla specifica, è il fatto di aver preso in considerazione come dataset un libro di narrativa in 
+lingua inglese, invece che i Tweet del famoso Social Network.
+\end{frame}
+
 \begin{frame}{Dataset}
 Il dataset che abbiamo scelto è composto da testi di romanzi quali:
 \begin{itemize}
@@ -46,15 +57,7 @@ La ragione di questa scelta è data dal fatto che il nostro modello prende in co
 la probabilità di una parola data la precedente.
 \end{frame}
 
-\begin{frame}{Assunzioni sul dataset}
-Per semplicità grammaticale e lessicale abbiamo scelto la lingua inglese in quanto scarsa o priva di determinati simboli (accenti) e generi (maschile / 
-femminile).
-Inoltre abbiamo effettuato un’ulteriore scrematura non considerando simboli di punteggiatura e caratteri speciali quali “\#”, “-“, “@” e simili, ma 
-considerando solamente lettere e numeri.
 
-La piccola modifica che abbiamo effettuato rispetto alla specifica, è il fatto di aver preso in considerazione come dataset un libro di narrativa in 
-lingua inglese, invece che i Tweet del famoso Social Network.
-\end{frame}
 
 \begin{frame}{Scelte implementative}
 Abbiamo sviluppato il progetto in linguaggio Python 3.6 e abbiamo aggiunto un ulteriore metodo di digitazione: oltre alla normale dicitura ed errori 
@@ -131,4 +134,3 @@ frasi
     \end{itemize}
 \end{frame}
 \end{document}
-

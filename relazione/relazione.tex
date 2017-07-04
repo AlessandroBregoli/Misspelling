@@ -100,7 +100,7 @@
 		\subsubsection{Matrice di transizione}
         	Questa matrice, data l'enorme dimensione del dizionario, è stata implementata come lista di liste; in questo modo si risparmia una grande
             quantità di spazio e si vanno a salvare solo le transizioni viste nel dataset. In fase di accesso se si richiede una transizione non
-            presente nella "matrice" il sistema ritorna una probabilità $\varepsilon$ molto piccola in modo da non avere mai valori pari a 0 durante
+            presente nella "matrice" il sistema restituisce una probabilità $\varepsilon$ molto piccola in modo da non avere mai valori pari a 0 durante
             l'esecuzione di Viterbi.
 	\subsection{Modello di osservazione}
 		La edit distance\cite{levenshtein} è uno strumento molto potente per capire la distanza di un termine da un altro e per questo è stata utilizzata 

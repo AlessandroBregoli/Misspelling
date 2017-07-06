@@ -50,6 +50,8 @@ v.offline = True
 v.prior_generator.load_stop_symbols_from_file("stop_symbols.txt")
 tot = 0
 corrette = 0
+non_perturbate_corrette = 0
+non_corrette_perturbate = 0
 non_perturbate = 0
 with open("test_set2.txt") as ts:
     for line in ts.readlines():
@@ -61,15 +63,16 @@ with open("test_set2.txt") as ts:
         correzione = v.viterbi(perturbata, [])
         words = line.split()
         for i in range(len(words)):
-            if correzione[i] == words[i]:
-                corrette += 1
-            tot += 1
-            if words[i] == perturbata.split()[i]:
+            if words[i] == perturbata.split()[i] and words[i] == correzione[i]:
                 non_perturbate += 1
-        print("Originale > " + line)
-        print("Perturbata> " + perturbata)
-        print("Corretta  > " + " ".join(correzione))
-    print("\n\nL'errore è: " + str(1-corrette/tot))
-    print("L'errore prima della correzione è: " + str(1-non_perturbate/tot))
-
+            elif correzione[i] == words[i]:
+                corrette += 1
+            elif words[i] == perturbata.split()[i]:
+                non_perturbate_corrette += 1
+            else:
+                non_corrette_perturbate += 1
+            tot += 1
+    cm = [[non_perturbate, non_corrette_perturbate],\
+            [non_perturbate_corrette,corrette]]
+print(cm)
 

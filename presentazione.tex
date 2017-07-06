@@ -92,8 +92,32 @@ puntino. Per esempio, abbiamo considerato adiacenti alla “d” (\braille{d}) i
  Partiamo dall'intuizione di fondo della edit distance e creiamo una funzione di edit probability, che dà la probabilità di aver digitato una certa 
 evidenza avendo inteso digitare una certa parola. Tale funzione si appoggia ad un modello di digitazione (tastiera o braille nel nostro caso).
  
- L'idea è cercare di massimizzare tale probabilità facendo confronti con ogni parola nel dizionario; per ragioni di performance, effettuiamo prima una 
-scrematura basata sulla edit distance tradizionale, tramite un bk-tree costruito in fase di training dalle parole del dizionario.
+ \end{frame}
+ 
+ \begin{frame}{Edit Probability}
+ 	    \begin{table}
+    \centering
+    \begin{tabular}{l|l|l|l|l|l}
+               & $\epsilon$ & c        & i        & a        & l \\ \hline
+	$\epsilon$ & 1.0        & 0.05     & 0.0025   & 0.000125  & 6.25e-06    \\
+    c          & 0.02       & 0.92     & 0.0184   & 0.000368  & 7.36e-06    \\
+    i          & 0.0004     & 0.046    & 0.8464   & 0.016928  & 0.00033856  \\
+    a          & 8e-06      & 0.0023   & 0.04232  & 0.778688  & 0.01557376  \\
+    o          & 1.6e-07    & 0.000115 & 0.002116 & 0.0389344 & 0.00648906  \\
+
+    \end{tabular}
+    \caption{Calcolo della edit probability di "ciao" dato "cial"}
+    \end{table}
+ \end{frame}
+ 
+ \begin{frame}{BK-Tree}
+ 	Tuttavia la edit probability risulta essere lenta e dunque è stata implementata la
+ 	struttura dati BK-Tree che risulta essere più efficiente nel selezionare parole
+ 	 sintatticamente vicine	a quella digitata. 
+ 	 \pause
+ 	 \begin{center}
+ 	 \includegraphics[width=0.5\textwidth]{bk-tree.png}
+ 	 \end{center}
 \end{frame}
 
 \begin{frame}{Correzione errori}

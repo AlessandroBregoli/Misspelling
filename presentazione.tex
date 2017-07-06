@@ -131,16 +131,48 @@ Misuriamo la percentuale di parole corrette prima e dopo aver applicato l'algori
 \vspace{0.5cm}
  
  \centering
- \begin{tabular}{|c|c|c|}
- \hline
+ \begin{tabular}{c|c|c}
   \textbf{Testo} & \textbf{Perturbazione} & \textbf{Errore residuo}\\
  \hline
- 	test1 & 16\% &  3\% \\
- \hline 
-    test2 & 12\% & 5\%\\
- \hline
+ 	test1 & 15\% &  2\% \\
+    test2 & 12\% & 4\%\\
  \end{tabular}
+
 \end{frame}
+
+
+
+\begin{frame}{Test 1}
+\centering
+\begin{tabular}{r|c|c}
+	               & non corrette & corrette \\ \hline
+	non perturbate & 350          & 0            \\
+	perturbate     & 10           & 54           \\
+\end{tabular}
+\begin{itemize}
+ \item Accuracy   : 98\%
+ \item Sensitivity: 100\%
+ \item Specificity: 97\%
+ \item Precision  : 84\%
+ \item NPV        : 100\%
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Test 2}
+\centering
+\begin{tabular}{r|c|c}
+	               & non corrette & corrette     \\ \hline
+	non perturbate & 172          & 0            \\
+	perturbate     & 7            & 17           \\
+\end{tabular}
+\begin{itemize}
+ \item Accuracy   : 96\%
+ \item Sensitivity: 100\%
+ \item Specificity: 96\%
+ \item Precision  : 70\%
+ \item NPV        : 100\%
+\end{itemize}
+\end{frame}  
 
 \begin{frame}{Conclusioni}
   I maggiori problemi dipendono dal fatto che l'HMM è del primo ordine dunque ogni parola dipende solo dalla propria distanza rispetto a quella 
